@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Reminder</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Water Reminder!</h1>
+        <p>This extension reminds you to drink water regularly and tells you a joke.</p>
+
+        <div class="settings">
+            <label for="interval">Reminder Interval (minutes):</label>
+            <input type="number" id="interval" min="1" value="30">
+        </div>
+
+        <div class="settings">
+            <label for="enableJokes">Enable Jokes:</label>
+            <input type="checkbox" id="enableJokes" checked>
+        </div>
+
+        <button id="saveBtn" class="btn">Save Settings</button>
+
+        <div id="tips" class="tips">
+            <h2>Health Tip:</h2>
+            <p id="healthTip"></p>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
