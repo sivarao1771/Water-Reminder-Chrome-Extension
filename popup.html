@@ -1,37 +1,278 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Water Reminder</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <title>Hydration Reminder</title>
+  <style>
+    body {
+      width: 350px; /* Slightly wider */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 15px;
+      transition: background-color 0.3s, color 0.3s;
+      font-size: 14px;
+    }
+
+    .light-theme {
+      background-color: #f8f9fa;
+      color: #212529;
+    }
+
+    .dark-theme {
+      background-color: #343a40;
+      color: #f8f9fa;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 22px;
+      margin-bottom: 20px;
+      color: #0d6efd; /* Blue theme color */
+    }
+     .dark-theme h1 {
+        color: #58a6ff; /* Lighter blue for dark theme */
+     }
+
+    .section {
+        margin-bottom: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .dark-theme .section {
+        background-color: #495057;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600; /* Slightly bolder */
+    }
+
+    input[type="number"], select {
+      width: 100%;
+      padding: 10px; /* Larger padding */
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      box-sizing: border-box;
+      background-color: #fff;
+      color: #212529;
+    }
+     .dark-theme input[type="number"], .dark-theme select {
+        background-color: #6c757d;
+        border-color: #5a6268;
+        color: #f8f9fa;
+     }
+
+
+    button {
+      width: 100%;
+      padding: 12px; /* Larger padding */
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      margin-top: 8px;
+      transition: background-color 0.2s;
+    }
+     button#start { background-color: #198754; } /* Green */
+     button#start:hover { background-color: #157347; }
+     button#stop { background-color: #dc3545; display: none; } /* Red, hidden initially */
+     button#stop:hover { background-color: #bb2d3b; }
+     button#drink { background-color: #0d6efd; } /* Blue */
+     button#drink:hover { background-color: #0b5ed7; }
+     button#reset { background-color: #ffc107; color: #000; } /* Yellow */
+     button#reset:hover { background-color: #e0a800; }
+
+
+    .toggle-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding: 10px;
+      background-color: #e9ecef;
+      border-radius: 5px;
+    }
+    .dark-theme .toggle-container {
+       background-color: #495057;
+    }
+    .toggle-container span {
+       font-weight: 600;
+    }
+
+    /* Simple Toggle Switch */
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    .toggle-switch input { display: none; } /* Hide default checkbox */
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px; width: 16px;
+      left: 4px; bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider { background-color: #0d6efd; }
+    input:checked + .slider:before { transform: translateX(26px); }
+
+    /* Progress Section */
+     .progress-container {
+      background-color: #e9ecef;
+      border-radius: 10px; /* More rounded */
+      height: 25px; /* Taller bar */
+      margin-top: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+     .dark-theme .progress-container {
+         background-color: #6c757d;
+     }
+    .progress-bar {
+      background-color: #0d6efd;
+      height: 100%;
+      width: 0; /* Starts at 0 */
+      border-radius: 10px;
+      transition: width 0.5s ease-in-out; /* Smoother transition */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      overflow: hidden; /* Hide text if bar is too small */
+    }
+     .drop.filled {
+      background-color: #5dade2; /* Light blue for filled - Corrected */
+    }
+
+    .progress-bar span {
+        padding: 0 5px; /* Padding for text inside bar */
+        white-space: nowrap;
+    }
+
+    .water-drops {
+      display: flex;
+      justify-content: center; /* Center drops */
+      flex-wrap: wrap; /* Allow wrapping */
+      gap: 8px; /* Space between drops */
+      margin-top: 15px;
+      padding: 0 10px; /* Prevent drops sticking to edges */
+    }
+    .drop {
+      width: 22px; /* Slightly larger */
+      height: 33px;
+      background-color: #adb5bd; /* Grey for empty */
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; /* Classic drop shape */
+      transition: background-color 0.4s;
+      position: relative;
+       box-shadow: inset 0 -2px 3px rgba(0,0,0,0.1); /* Subtle inner shadow */
+    }
+    .drop.filled {
+      background-color: #5dade2; /* Light blue for filled */
+    }
+
+    .stats p {
+      margin: 8px 0;
+      text-align: center;
+      font-size: 13px;
+      color: #6c757d;
+    }
+    .dark-theme .stats p {
+       color: #adb5bd;
+    }
+    .stats span {
+        font-weight: bold;
+        color: #495057;
+    }
+     .dark-theme .stats span {
+        color: #e9ecef;
+     }
+
+  </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Water Reminder!</h1>
-        <p>This extension reminds you to drink water regularly and tells you a joke.</p>
+<body class="light-theme"> <h1>Hydration Helper</h1>
 
-        <div class="settings">
-            <label for="interval">Reminder Interval (minutes):</label>
-            <input type="number" id="interval" min="1" value="30">
-        </div>
+   <div class="toggle-container">
+    <span>Dark Mode</span>
+    <label class="toggle-switch">
+      <input type="checkbox" id="theme-toggle">
+      <span class="slider"></span>
+    </label>
+  </div>
 
-        <div class="settings">
-            <label for="enableJokes">Enable Jokes:</label>
-            <input type="checkbox" id="enableJokes" checked>
-        </div>
+  <div class="section" id="settings">
+    <h2>Settings</h2>
+     <div class="form-group">
+        <label for="interval">Remind me every (minutes):</label>
+        <input type="number" id="interval" min="1" max="180" value="30" required>
+      </div>
 
-        <button id="saveBtn" class="btn">Save Settings</button>
+      <div class="form-group">
+        <label for="goal">Daily Goal (glasses):</label>
+        <input type="number" id="goal" min="1" max="20" value="8" required>
+      </div>
 
-        <div id="tips" class="tips">
-            <h2>Health Tip:</h2>
-            <p id="healthTip"></p>
-        </div>
+      <div class="form-group">
+        <label for="message-style">Reminder Message Style:</label>
+        <select id="message-style">
+          <option value="standard">Standard</option>
+          <option value="motivational">Motivational</option>
+          <option value="friendly">Friendly</option>
+          <option value="health">Health Facts</option>
+        </select>
+      </div>
+  </div>
+
+  <div class="section" id="controls">
+       <h2>Controls</h2>
+       <button id="start">Start Reminders</button>
+       <button id="stop">Stop Reminders</button> <button id="drink">I Drank Water!</button>
+       <button id="reset">Reset Daily Progress</button>
+  </div>
+
+
+  <div class="section" id="progress-section">
+     <h2>Today's Progress</h2>
+     <p style="text-align: center; margin-bottom: 10px;">
+        <span id="current-count">0</span> of <span id="total-goal">8</span> glasses
+     </p>
+    <div class="progress-container">
+      <div class="progress-bar" id="progress">
+          <span id="progress-text">0%</span> </div>
     </div>
+    <div class="water-drops" id="water-drops">
+        </div>
+  </div>
 
-    <script src="popup.js"></script>
+  <div class="section" id="stats-section">
+    <h2>Stats</h2>
+    <div class="stats">
+        <p>Last drink: <span id="last-drink">Not yet recorded</span></p>
+        <p>Reminders received today: <span id="reminders-count">0</span></p>
+     </div>
+  </div>
+
+  <script src="popup.js"></script>
 </body>
 </html>
