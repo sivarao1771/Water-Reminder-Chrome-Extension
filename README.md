@@ -2,6 +2,7 @@
 
 A simple but effective Google Chrome extension designed to help you stay hydrated throughout the day. It provides customizable reminders to drink water and tracks your daily progress towards your hydration goals.
 
+![https://drive.google.com/file/d/1B5kAAKJGTJvXseAaqHNHmZ5QDD801144/view?usp=sharing]()
 
 ## Features
 
